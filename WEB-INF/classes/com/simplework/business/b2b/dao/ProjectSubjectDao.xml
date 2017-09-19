@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simplework.business.b2b.dao.ProjectSubjectDao">
+  <resultMap id="BaseResultMap" type="com.simplework.business.b2b.pojo.ProjectSubject">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="cname" jdbcType="VARCHAR" property="cname" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="business_code" jdbcType="VARCHAR" property="businessCode" />
+    <result column="business_url" jdbcType="VARCHAR" property="businessUrl" />
+    <result column="certificates_code" jdbcType="VARCHAR" property="certificatesCode" />
+    <result column="certificates_url" jdbcType="VARCHAR" property="certificatesUrl" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    <result column="add_ip" jdbcType="VARCHAR" property="addIp" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="examine_id" jdbcType="BIGINT" property="examineId" />
+    <result column="examine_time" jdbcType="TIMESTAMP" property="examineTime" />
+    <result column="examine_msg" jdbcType="VARCHAR" property="examineMsg" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, cname, address, business_code, business_url, certificates_code, certificates_url, 
+    add_time, add_ip, status, examine_id, examine_time, examine_msg
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from project_subject
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="queryByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from project_subject
+        where user_id=#{userId}
+    </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from project_subject
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertSelective" parameterType="com.simplework.business.b2b.pojo.ProjectSubject">
+    insert into project_subject
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="cname != null">
+        cname,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="businessCode != null">
+        business_code,
+      </if>
+      <if test="businessUrl != null">
+        business_url,
+      </if>
+      <if test="certificatesCode != null">
+        certificates_code,
+      </if>
+      <if test="certificatesUrl != null">
+        certificates_url,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+      <if test="addIp != null">
+        add_ip,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="examineId != null">
+        examine_id,
+      </if>
+      <if test="examineTime != null">
+        examine_time,
+      </if>
+      <if test="examineMsg != null">
+        examine_msg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="cname != null">
+        #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="businessCode != null">
+        #{businessCode,jdbcType=VARCHAR},
+      </if>
+      <if test="businessUrl != null">
+        #{businessUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="certificatesCode != null">
+        #{certificatesCode,jdbcType=VARCHAR},
+      </if>
+      <if test="certificatesUrl != null">
+        #{certificatesUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addIp != null">
+        #{addIp,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="examineId != null">
+        #{examineId,jdbcType=BIGINT},
+      </if>
+      <if test="examineTime != null">
+        #{examineTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examineMsg != null">
+        #{examineMsg,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.simplework.business.b2b.pojo.ProjectSubject">
+    update project_subject
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="cname != null">
+        cname = #{cname,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="businessCode != null">
+        business_code = #{businessCode,jdbcType=VARCHAR},
+      </if>
+      <if test="businessUrl != null">
+        business_url = #{businessUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="certificatesCode != null">
+        certificates_code = #{certificatesCode,jdbcType=VARCHAR},
+      </if>
+      <if test="certificatesUrl != null">
+        certificates_url = #{certificatesUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="addIp != null">
+        add_ip = #{addIp,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="examineId != null">
+        examine_id = #{examineId,jdbcType=BIGINT},
+      </if>
+      <if test="examineTime != null">
+        examine_time = #{examineTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="examineMsg != null">
+        examine_msg = #{examineMsg,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="count" parameterType="com.simplework.business.iframework.mybatis.query.ConditionExample" resultType="java.lang.Integer">
+    select count(*) from project_subject
+	<if test="_parameter != null" >
+		<include refid="conditionQuery.where" />
+	</if>
+  </select>
+  <select id="query" parameterType="com.simplework.business.iframework.mybatis.query.ConditionExample" resultMap="BaseResultMap">
+    select
+	<if test="distinct" >
+		distinct
+	</if>
+	<include refid="Base_Column_List" />
+	from project_subject
+	<if test="_parameter != null" >
+		<include refid="conditionQuery.where" />
+	</if>
+	<if test="orderByClause != null" >
+		order by ${orderByClause}
+	</if>
+	<if test="limit != null" >
+		<if test="offset != null" >
+			limit ${offset}, ${limit}
+		</if>
+		<if test="offset == null" >
+			limit ${limit}
+		</if>
+	</if>
+  </select>
+</mapper>

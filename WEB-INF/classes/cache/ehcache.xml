@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" updateCheck="false">
+    <!--<diskStore path="user.dir/ehcache"/>-->
+    <defaultCache
+            maxEntriesLocalHeap="1000"
+            maxEntriesLocalDisk="1000"
+            eternal="false"
+            timeToIdleSeconds="600"
+            timeToLiveSeconds="600">
+    </defaultCache>
+    <!--最大存活10小时 30分钟无操作过期-->
+    <cache name="shiro-activeSessionCache"
+           maxEntriesLocalHeap="1000"
+           eternal="false"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="36000"
+           diskPersistent="true"
+           overflowToDisk="true"
+           statistics="true">
+    </cache>
+    <cache name="shiro-kickout-session"
+           maxEntriesLocalHeap="1000"
+           eternal="false"
+           timeToIdleSeconds="3600"
+           timeToLiveSeconds="0"
+           overflowToDisk="true"
+           diskPersistent="true"
+           statistics="true">
+    </cache>
+    <!--shiro 密码输错次数缓存-->
+    <cache name="passwordRetryCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           diskPersistent="true"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true">
+    </cache>
+    <!--一个小时之内同类型验证码最多可以发送几次-->
+    <cache name="sendSmsCodeRetryCache"
+           eternal="false"
+           maxElementsOnDisk="1000"
+           maxElementsInMemory="1000"
+           overflowToDisk="true"
+           diskPersistent="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="3600"
+           memoryStoreEvictionPolicy="LRU"/>
+    <cache name="SIMPLE_WORK_CACHE_CODE_VALIDATOR"
+           eternal="false"
+           maxElementsOnDisk="1000"
+           maxElementsInMemory="1000"
+           overflowToDisk="true"
+           diskPersistent="false"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LRU"/>
+    <!--
+    1.必须要有的属性：
+    name: cache的名字，用来识别不同的cache，必须惟一。
+    maxElementsInMemory: 内存管理的缓存元素数量最大限值。
+    maxElementsOnDisk: 硬盘管理的缓存元素数量最大限值。默认值为0，就是没有限制。
+    eternal: 设定元素是否持久话。若设为true，则缓存元素不会过期。
+    overflowToDisk: 设定是否在内存填满的时候把数据转到磁盘上。
+    2.下面是一些可选属性：
+    timeToIdleSeconds：用于设置对象在cache中的最大闲置时间       设定元素在过期前空闲状态的时间，只对非持久性缓存对象有效。默认值为0,值为0意味着元素可以闲置至无限长时间。
+    timeToLiveSeconds:用于设置对象在cache中的最大存活时间         设定元素从创建到过期的时间。其他与timeToIdleSeconds类似。
+    diskPersistent: 设定在虚拟机重启时是否进行磁盘存储，默认为false.(我的直觉，对于安全小型应用，宜设为true)。
+    diskExpiryThreadIntervalSeconds: 访问磁盘线程活动时间。
+    diskSpoolBufferSizeMB: 存入磁盘时的缓冲区大小，默认30MB,每个缓存都有自己的缓冲区。
+    memoryStoreEvictionPolicy: 如果内存中数据超过内存限制，向磁盘缓存时的策略。默认值LRU，可选FIFO、LFU。
+        FIFO ，first in first out (先进先出).
+        LFU ， Less Frequently Used (最少使用).意思是一直以来最少被使用的。缓存的元素有一个hit 属性，hit 值最小的将会被清出缓存。
+        LRU ，Least Recently Used(最近最少使用). (ehcache 默认值).缓存的元素有一个时间戳，当缓存容量满了，而又需要腾出地方来缓存新的元素的时候，那么现有缓存元素中时间戳离当前时间最远的元素将被清出缓存。
+-->
+</ehcache>

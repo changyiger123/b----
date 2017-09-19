@@ -1,0 +1,47 @@
+<#assign REQ_URI=request.getRequestURI>
+<#macro import_script></#macro>
+<#macro import_css></#macro>
+<#macro layout title>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>${title!"登录"} - 浙江易建易工网络科技有限公司</title>
+    <#include "inc/favicon.html" />
+    <link rel="stylesheet" type="text/css" href="${REQ}/assets/plugins/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="${REQ}/assets/css/app.css">
+    <@import_css />
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo logo" style="width:100px"><div class="mainlogo"></div></div>
+        <div id="dewm"></div>
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><div class="welcome"></div></li>
+            <li class="layui-nav-item"><a href="javascript:;" id="ewm"></a></li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="${REQ}/profile.html" style="padding:0 6px">
+                    <img src="${REQ}/assets/img/zy_mrtx.png" alt=""/>
+                </a>
+            </li>
+            <li class="layui-nav-item">你好，<span><@shiro.principal property="username"></@shiro.principal></span></li>
+            <li class="layui-nav-item"><img class="wrz" src="${REQ}/assets/img/wrz.png" alt=""/></li>
+            <li class="layui-nav-item lxdh" id="lxdh"><a href="javascript:;">联系电话</a></li>
+            <li class="layui-nav-item aqtc" id="aqtc"><a href="/logout.html" class="tc">安全退出</a></li>
+        </ul>
+    </div>
+        <#nested>
+</div>
+<script type="text/javascript">window.BASE_URL = "${REQ}";</script>
+<script type="text/javascript" src="${REQ}/assets/js/jquery.min.js" ></script>
+<script type="text/javascript" src="${REQ}/assets/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="${REQ}/assets/js/app.js"></script>
+<@import_script />
+</body>
+</html>
+</#macro>

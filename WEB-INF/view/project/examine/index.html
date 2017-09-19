@@ -1,0 +1,99 @@
+<#include "inc/layout.html" />
+<#macro import_script>
+    <script type="text/javascript">
+        layui.use(['layer', 'table'], function(){
+            var layer = layui.layer
+                ,table = layui.table;
+
+            var examineTable = table.render({
+                elem: '#projectExamine' //指定原始表格元素选择器（推荐id选择器）
+                ,page:true
+                ,limits:[15,20,30,50,100]
+                ,limit:15
+                ,id:'projectExamine'
+                ,cols:  [[ //标题栏
+                    {field: 'pname', title: '班组名称', width:200,event: 'viewDetail'}
+                    ,{field: 'manageNames', title: '承包人', width:200,event: 'viewDetail'}
+                    ,{field: 'realname', title: '班组长', width:200,event: 'viewDetail'}
+                    ,{field: 'memberCount', title: '工人数', width:200,event: 'viewDetail'}
+                    ,{fixed: 'right', width:195, align:'center',title: '操作', toolbar: '#barDemo'}
+                ]]//设置表头
+                ,url: '${REQ}/project/examine/list.html'
+            });
+
+            table.on('tool(projectExamine)', function(obj){
+                var data = obj.data
+                    ,layEvent = obj.event;
+                if(layEvent === 'add'){
+                    var teamList = $('.myprolist a'),teamListRender = "<dl class=\"layui-nav-child project-examine-team-list layui-layer-wrap\" style=\"display: block; top:0;\">";
+                    $.each(teamList,function (i) {
+                        if($(this).data("id")!=0) {
+                            teamListRender += "<dd><a href=\"javascript:;\" class=\"fzname\" data-id=\"" + $(this).data("id") + "\">" + $(this).html() + "</a></dd>";
+                        }
+                    });
+                    teamListRender += "<dd class=\"cjbefore\"><img src=\"/assets/img/zy_cbl_cjxfz.png\" alt=\"\"></dd>";
+                    teamListRender += "</dl>";
+                    layer.open({
+                        title: '添加到分组'
+                        ,shade:false
+                        ,area: ['150px','300px']
+                        ,content: teamListRender
+                        ,btn:[]
+                        ,success:function () {
+                            addTeam(".project-examine-team-list");
+                        }
+                    });
+                    $('.project-examine-team-list').on('click','.fzname',function(){
+                        var teamId = $(this).data('id');
+                        ajaxData("project/move.html","relationId="+data.id+"&teamId="+teamId,function(result){
+                            if(result.code==0){
+                                layer.msg("成功");
+                                examineTable.reload();
+                            }else{
+                                layer.msg(result.message, {icon: 5});
+                            }
+                        });
+                        layer.closeAll();
+                    })
+                }else if(layEvent === 'del'){
+                    layer.confirm('请确认是否删除？', function(index){
+                        obj.del();
+                        ajaxData("project/delete.html","relationId="+data.id,function(result){
+                            if(result.code==0){
+                                layer.msg("成功");
+                                examineTable.reload();
+                            }else{
+                                layer.msg(result.message, {icon: 5});
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }else if(layEvent == 'viewDetail'){
+                    var contentHtml = "";
+                    contentHtml += "<h3 style='font-weight: bold;'>班组成员</h3>";
+                    contentHtml += "<p>承包人："+(typeof data.manageNames == "undefined"?"":data.manageNames)+"</p>";
+                    contentHtml += "<p>班组长："+(typeof data.realname == "undefined"?"":data.realname)+"</p>";
+                    contentHtml += "<p>成员："+(typeof data.memberNames == "undefined"?"":data.memberNames)+"</p>";
+                    contentHtml += "<p>已退出成员："+(typeof data.memberNames2 == "undefined"?"":data.memberNames2)+"</p>";
+                    layer.open({
+                        title: data.pname
+                        ,content:contentHtml
+                        ,area: ['350px','300px']
+                    });
+                }
+            });
+        });
+    </script>
+</#macro>
+<#macro import_css>
+    <style type="text/css">.project-examine-team-list a{display: block; padding:0 10px;}.fzname:hover{background:#e6e7ea;}</style>
+</#macro>
+<@layout title="待审核项目组">
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-mini sadds" lay-event="add"></a>
+    <a class="layui-btn layui-btn-primary layui-btn-mini dels" lay-event="del"></a>
+</script>
+<table id="projectExamine" lay-filter="projectExamine" style="background:#000000">
+    <p  class="layui-table-header" style="background: #ffffff;border:1px solid #d6d7dc;line-height:45px;padding-left: 20px;font-size:17px;">待审核项目组</p>
+</table>
+</@layout>

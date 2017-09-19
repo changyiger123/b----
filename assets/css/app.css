@@ -1,0 +1,758 @@
+/*登录页面*/
+*{
+    margin:0;
+    padding:0;
+    font-family: "Microsoft YaHei" ! important;
+}
+input{
+    margin:0;
+    padding:0;
+}
+ul,li,ol{
+    list-style: none;
+}
+a{
+    text-decoration: none;
+}
+html,body{
+    width:100%;
+    min-height:768px;
+    height:100%;
+}
+img{
+    border:0;
+}
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+.login-body-bg{
+    background:url(../img/login_bg.png) no-repeat;
+    background-size: 100% 100%;
+}
+.content{
+    width:1000px;
+    height:90%;
+    padding-top:10%;
+    margin:0 auto;
+    position: relative;
+}
+.content .logo{
+    position:absolute;
+    width: 169px;
+    height:54px;
+    left:0;
+    top:31px;
+    background: url(../img/total.png) no-repeat 0 0;
+}
+.loginput{
+    width:400px;
+    height:380px;
+    padding-top:20px;
+    margin:0 auto;
+    background:rgba(255,255,255,.5);
+    border-radius: 9px;
+    position: relative;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:#cccccc;opacity:1;
+}
+
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:#cccccc;opacity:1;
+}
+
+input:-ms-input-placeholder{
+    color:#cccccc;opacity:1;
+}
+
+input::-webkit-input-placeholder{
+    color:#cccccc;opacity:1;
+}
+.loginput p{
+    height:50px;
+    width:300px;
+    margin:0 auto;
+    margin-top:20px;
+}
+.loginput .typein{
+    height:46px;
+    width:296px;
+    color:#000000;
+    text-indent: 19px;
+    border:1px solid #d4d7dd;
+}
+.loginput p:nth-child(1){
+    font-size: 22px;
+}
+.loginput p:nth-child(2) input:focus{
+    outline: none;
+    border-color:#00a0e8;
+}
+.loginput p:nth-child(3) input:focus{
+    outline: none;
+    border-color:#00a0e8;
+}
+.loginput p:nth-child(4){
+    height:12px;
+    font-size: 16px;
+    color:#666666;
+}
+.loginput p:nth-child(4) a{
+    color:#00a0e8;
+    float:right;
+}
+.loginput p:nth-child(5){
+    background:#ffa800;
+    color:#ffffff;
+    text-align: center;
+    line-height:50px;
+    cursor: pointer;
+    font-size: 22px;
+    margin-top:30px;
+    border-radius: 2px;
+}
+.loginput p:nth-child(6){
+    text-align: right;
+    color:#00a0e8;
+}
+.loginput p:nth-child(6) a{
+    color:#00a0e8;
+    font-size: 16px;
+}
+.footer{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width:100%;
+    height:14%;
+    padding-top:2.7%;
+    background-color:rgba(0,0,0,0.6);
+    filter: Alpha(opacity=60);
+    margin:0 auto;
+    color:#ffffff;
+}
+.footer p{
+    line-height:27px;
+}
+.footer p:nth-child(1){
+    font-weight: 700;
+}
+.footer p span{
+    display: block;
+    width:700px;
+    margin:0 auto;
+    padding-left:300px;
+}
+.footer p span img{
+    display: inline-block;
+    width:17px;
+    height:17px;
+}
+/*侧边栏和头部页面样式*/
+.mainlogo{
+    width:108px;
+    height:50px;
+    background: url(../img/total.png) no-repeat 0 -116px;
+    cursor: pointer;
+}
+.welcome{
+    width:91px;
+    height:50px;
+    background: url(../img/total.png) no-repeat 0 -64px;
+}
+#ewm{
+    margin-left: 20px;
+    height:50px;
+    background: url(../img/total.png) no-repeat -741px -64px;
+}
+#dewm{
+    width:160px;
+    height:187px;
+    position:fixed;
+    top:60px;
+    left:260px;
+    display: none;
+    z-index: 99999;
+    background: url(../img/total.png) no-repeat -400px -303px;
+}
+#lxdh{
+    background: url(../img/total.png) no-repeat -149px -114px;
+    margin-left: 20px;
+}
+#lxdh a{
+    color:#ffffff;
+    margin-left:32px;
+}
+#aqtc{
+    background: url(../img/total.png) no-repeat -101px -64px;
+}
+#aqtc a{
+    color:#ffffff;
+    margin-left:28px;
+}
+.dsh{
+    background: url(../img/total.png) no-repeat 20px -165px;
+}
+.dsh:hover{
+    background: url(../img/total.png) no-repeat -180px -165px;
+}
+
+.mypro{
+    background: url(../img/total.png) no-repeat -380px -165px;
+}
+.mypro:hover{
+    background: url(../img/total.png) no-repeat -580px -165px;
+}
+.jldw{
+    background: url(../img/total.png) no-repeat -380px -207px;
+}
+.jldw:hover{
+    background: url(../img/total.png) no-repeat -580px -207px;
+}
+.rz{
+    width:80%;
+    height:300px;
+    text-align: center;
+    margin-top:100px;
+    color:#010101;
+}
+.rz h4{
+    font-size:22px;
+    line-height:50px;
+}
+.rz p{
+    font-size:18px;
+    margin-bottom:55px;
+}
+.rz a{
+    display:inline-block;
+    width:200px;
+    height:50px;
+    line-height: 50px;
+    background: #ffa800;
+    color:#ffffff;
+    font-size:23px;
+    box-shadow: 1px 1px 1px #f6ce82;
+    border-radius: 2px;
+}
+.wrz{
+    margin-left:6px;
+}
+.shz{
+    width:360px;
+    height:115px;
+    margin:200px auto;
+
+    text-align: center;
+}
+.shz dt{
+    margin-bottom:20px;
+}
+.shz dd{
+    font-size: 18px;
+}
+.myprolist .fzname{
+    text-align:left;
+}
+.identifybody{
+    padding-top: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+/*password页面样式*/
+.psdbody{
+    width:1198px;
+    height:598px;
+    border:1px solid #d6d7dc;
+    margin:20px auto;
+    background: #ffffff;
+}
+.psdbody h5{
+    padding-left: 30px;
+    font-size: 23px;
+    color:#000000;
+    line-height: 59px;
+    border-bottom: 1px solid #d6d7dc;
+}
+.srk{
+    width:300px;
+    height:150px;
+    margin:0 auto;
+    margin-top:90px;
+    overflow: hidden;
+
+}
+.srk li{
+    width:300px;
+    height:150px;
+}
+.srk li p{
+    width:298px;
+    height:47px;
+    padding-top:1px;
+    border:1px solid #d6d7dc;
+    margin-bottom:20px;
+}
+.srk li p input{
+    border:none;
+    width:156px;
+    padding-left: 20px;
+    height:47px;
+    line-height:47px;
+}
+.srk li p input[type=button]{
+    width:120px;
+    height:44px;
+    display:block;
+    background: #ffa800;
+    float:right;
+    color:#ffffff;
+}
+#nextBtn{
+    width:200px;
+    height:50px;
+    background: #ffa800;
+    margin:0 auto;
+    display: block;
+    border: none;
+    color:#ffffff;
+    font-size: 23px;
+    line-height:50px;
+}
+/*register页面样式*/
+.zccontent{
+    width:1000px;
+    height:100%;
+    margin:0 auto;
+}
+.header{
+    width:100%;
+    padding-top:30px;
+    height:69px;
+    border-bottom: 1px solid #d6d7dc;
+    color:#666666;
+    margin-bottom:60px;
+}
+.header b{
+    margin:0 15px;
+}
+.header img{
+    display: inline-block;
+    float: left;
+}
+.header .logoright{
+    display:inline-block;
+    margin-top:8px;
+    font-size: 24px;
+    height:40px;
+    line-height:40px;
+    border-left: 1px solid #d6d7dc;
+    margin-left: 20px;
+    padding-left: 16px;
+}
+.header .back{
+    float: right;
+    height:17px;
+    display: block;
+    font-size: 17px;
+}
+.header .back a{
+    display: block;
+    color:#000000;
+    margin-top:19px;
+    text-decoration:underline;
+}
+.registerinput{
+    width:761px;
+    float: left;
+    padding-left:29px;
+
+}
+.registerinput input{
+    border:1px solid #dadbdf;
+    font-size: 18px;
+}
+.registerinput .yzm{
+    height:50px;
+    margin-bottom:20px;
+}
+.registerinput .yzm p{
+    width:300px;
+    height:46px;
+    /*border:1px solid #a9a9a9;*/
+}
+.registerinput .yzm p input{
+    width:168px;
+    height:46px;
+    float: left;
+}
+.registerinput input:focus{
+    outline: none;
+    border-color:#00a0e8;
+}
+.registerinput .yzm p .getyzm{
+    float: left;
+    width:120px;
+    height:47px;
+    margin-top:1px;
+    color:#fffefe;
+    border:none;
+    background: #ffa800;
+    outline: none;
+    cursor: pointer;
+}
+.registerinput .yzm span{
+    line-height: 50px;
+    margin-right: 10px;
+    font-size: 17px;
+}
+.registerinput p{
+    height:50px;
+    margin-bottom:20px;
+}
+.registerinput p span{
+    font-size: 18px;
+    margin-right: 10px;
+    color:#262626;
+    line-height: 50px;
+}
+.registerinput p .des{
+    padding-top:4px;
+    font-size:13px;
+    color:#666666;
+    line-height:19px;
+    display:block;
+    width:270px;
+    margin-left:20px;
+}
+.registerinput p input{
+    width:291px;
+    height:46px;
+    padding-left: 9px;
+}
+.registerinput .psd span{
+    margin-right: 27px;
+}
+.registerinput .btn input{
+    background: none;
+    border: none;
+    border:0;
+    outline: none;
+    cursor: pointer;
+    font-size: 24px;
+}
+.registerinput .btn{
+    width:300px;
+    height:50px;
+    margin-left: 61px;
+    background: #ffa800;
+}
+.registerinput .btn input{
+    color:#ffffff;
+}
+.registerinput .xy{
+    margin-left: 62px;
+    color:#666666;
+    font-size: 17px;
+}
+.registerinput .xy a{
+    color:#00a0e8;
+    text-decoration: underline;
+}
+::-webkit-input-placeholder {
+    color:#cccccc;
+}
+.weixin{
+    float:left;
+    width:160px;
+    height:187px;
+    background: url(../img/total.png) no-repeat -400px -303px;
+}
+/*认证个人信息页面样式*/
+/*.identifybodyrz{*/
+    /*width:1198px;*/
+    /*height:1100px;*/
+    /*/!*overflow: hidden;*!/*/
+    /*margin:0 auto;*/
+    /*margin-top:20px;*/
+    /*marin-bottom:30px;*/
+    /*background: #ffffff;*/
+    /*border:1px solid #d6d7dc;*/
+/*}*/
+/*.identifybodyrz h3{*/
+    /*height:59px;*/
+    /*border-bottom: 1px solid #d6d7dc;*/
+    /*color:#000000;*/
+    /*font-size:24px;*/
+    /*text-indent: 30px;*/
+/*}*/
+.upbody{
+    padding-left:30px;
+    padding-top:20px;
+    padding-right:107px;
+}
+.upbody h5{
+    font-size: 12px;
+    color:#000000;
+    margin-bottom:13px;
+}
+.upbody p{
+    color:#666666;
+    font-size: 14px;
+    line-height:26px;
+}
+.yytitle{
+    width:1052px;
+    height:17px;
+    margin-top:15px;
+    margin-bottom:15px;
+}
+.yytitle p{
+    width:86px;
+    font-size:17px;
+    line-height: 17px;
+    color:#000000;
+    float: left;
+}
+.yytitle span{
+    display: inline-block;
+    float: left;
+    width:960px;
+    height:17px;
+    background: url(../img/xian.jpg) repeat-x;
+}
+.upload{
+    width:940px;
+    height:300px;
+    padding-left: 60px;
+}
+.upload dl{
+    float:left;
+    width:298px;
+    height:298px;
+    border:1px solid #d6d7dc;
+    text-align: center;
+    /*padding-top:96px;*/
+    margin-right:140px;
+    /*background: #f5f5fa;*/
+    cursor: pointer;
+}
+.upload dl img{
+    width:298px;
+    height:298px;
+}
+.upload .qyinput{
+    float:left;
+    padding-top:30px;
+    width:500px;
+    height:270px;
+}
+.upload .qyinput p{
+    height:50px;
+    margin-bottom:20px;
+    font-size: 16px;
+    line-height: 50px;
+}
+.upload .qyinput p input{
+    width:400px;
+    height:50px;
+    float: right;
+}
+.identifybody .tj{
+    width:300px;
+    height:50px;
+    background: #ffa800;
+    text-align: center;
+    margin:30px auto;
+
+}
+.identifybody .tj a{
+    color: #ffffff;
+    font-size: 23px;
+    line-height: 50px;
+}
+/*pcenter个人中心样式*/
+
+.pcentertop{
+    width:1198px;
+    height:327px;
+    border:1px solid #d6d7dc;
+    background: #ffffff;
+    margin:0 auto;
+    margin-top:20px;
+    margin-bottom:21px;
+}
+.pcenterbottom{
+    width:1198px;
+    height:933px;
+    border:1px solid #d6d7dc;
+    background: #ffffff;
+    margin:0 auto;
+    margin-top:20px;
+    margin-bottom:136px;
+}
+.pcentertitle{
+    line-height:59px;
+    height:59px;
+    color:#000000;
+    font-size:24px;
+    border-bottom:1px solid #d6d7dc;
+    text-indent: 29px;
+}
+.personalinfo{
+    height:238px;
+    padding-left: 89px;
+    padding-top:30px;
+}
+.personalinfo dl{
+    width:160px;
+    height:237px;
+    float:left;
+    text-align: center;
+    margin-right: 100px;
+}
+.personalinfo dl dt{
+    width:158px;
+    height:158px;
+    border:1px solid #d6d7dc;
+    background: #f1f1f1;
+    margin-bottom: 10px;
+}
+.personalinfo dl dd a{
+    font-size: 17px;
+    color:#00a0e8;
+}
+.nameinfo{
+    font-size: 17px;
+    color:#666666;
+    line-height:48px;
+}
+.nameinfo p span{
+    color:#000000;
+    margin-right: 20px;
+}
+.nameinfo a{
+    font-size: 17px;
+    color:#00a0e8;
+}
+.yytitle{
+    width:1052px;
+    height:17px;
+    margin-top:15px;
+    margin-bottom:15px;
+}
+.yytitle p{
+    width:86px;
+    font-size:17px;
+    line-height: 17px;
+    color:#000000;
+    float: left;
+}
+.yytitle span{
+    display: inline-block;
+    float: left;
+    width:960px;
+    height:17px;
+    background: url(../img/xian.jpg) repeat-x;
+}
+.pcenterbottom .yytitle{
+    padding-left: 29px;
+}
+.pcenterbottom dl{
+    padding-left:89px;
+    height:300px;
+    margin-bottom: 50px;
+}
+.pcenterbottom dl dt{
+    width:300px;
+    height:300px;
+    float: left;
+    /*border:1px solid red;*/
+    margin-right:139px;
+}
+.pcenterbottom dl dt img{
+    width:300px;
+    height:300px;
+}
+.pcenterbottom dl dd{
+    font-size:17px;
+    line-height:71px;
+}
+.pcenterbottom dl dd p span{
+    color:#000000;
+}
+/*list.index页面样式*/
+.prodetail{
+    width:80%;
+    height:408px;
+    border:1px solid #d6d7dc;
+    margin-left:30px;
+    margin-top:30px;
+    background:#ffffff;
+    color:#666666;
+    font-size:16px;
+}
+.prodetailtitle{
+    border-bottom:1px solid #d6d7dc;
+    line-height:60px;
+    font-size:18px;
+    color:#000000;
+    padding-left: 30px;
+}
+.prodetailcont{
+    height:327px;
+    padding-left:30px;
+    padding-top:20px;
+}
+.prodetailcont p{
+    line-height:36px;
+}
+.prodetailcont p:nth-child(1){
+    color:#000000;
+    font-size:18px;
+
+}
+.layui-btn-mini{
+    border:none;
+    width:15px;
+    height:15px;
+}
+.adds{
+    background: url(../img/total.png) no-repeat -649px -127px;
+}
+.dels{
+    background: url(../img/total.png) no-repeat -721px -127px;
+}
+.qx{
+    background: url(../img/total.png) no-repeat -683px -127px;
+}
+.sadds{
+    background: url(../img/total.png) no-repeat -600px -127px;
+}
+/*修改手机号码页面*/
+.main{
+    padding-top:30px;
+}
+
+
+
+/*用户协议页面*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

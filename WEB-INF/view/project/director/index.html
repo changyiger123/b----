@@ -1,0 +1,99 @@
+<#include "inc/layout.html" />
+<#macro import_script>
+    <script type="text/javascript">
+        layui.use(['layer', 'table'], function() {
+            var layer = layui.layer,table = layui.table;
+            var projectDirectorTable = table.render({
+                elem: '#projectDirector'
+                ,page:true
+                ,limits:[15,20,30,50,100]
+                ,limit:15
+                ,id:'projectDirector'
+                ,cols:  [[ //标题栏
+                    {field: 'sname', title: '姓名单位名称', width:500}
+                    ,{fixed: 'right', width:495, align:'center',title: '权限设置', toolbar: '#barDemo'}
+                ]]//设置表头
+                ,url: '${REQ}/project/director/list.html'
+            });
+            //监听工具条
+            table.on('tool(projectDirector)', function(obj){
+                var data = obj.data
+                    ,layEvent = obj.event;
+                var strs='';
+                var supervisionId = data.id;
+                var subjectRelationIds=[];
+                if(layEvent === 'add'){
+                    ajaxData("project/team.html","page=1&limit=100&flag=0",function(result){
+                        if(result.code==0){
+                            for(var i=0;i<result.content.length;i++){
+                                var projects = result.content[i].project;
+                                if(projects.length>0){
+                                    strs += '<p>'+'<input type="checkbox" lay-skin="primary"/>'+'<span class="listfa">'+result.content[i].tname+'</span>'+'</p>';
+                                    for(var j=0;j<projects.length;j++){
+                                        strs += '<p>'+'<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>'+'<input type="checkbox" lay-skin="primary" name="tests" value="'+projects[j].projectId+'"/><span class="listso" dataId="'+projects[j].projectId+'">'+projects[j].pname+'</span>'+'</p>';
+                                    }
+                                }
+                            }
+                            layer.open({
+                                type:1,title: data.sname+'权限设置',area: ['385px', '308px'],shade: 0,maxmin:false,zIndex: layer.zIndex
+                                ,content:"<div id='pj'>" + strs + "</div>"
+                                ,btn: ['确认', '取消']
+                                ,btn2: function(){
+                                    layer.closeAll();
+                                }
+                                ,btn1: function(){
+                                    $("input:checkbox[name='tests']:checked").each(function(){
+                                        subjectRelationIds.push($(this).val());
+                                    });
+                                    ajaxData("project/director/add.html","supervisionId="+supervisionId+"&subjectRelationIds="+subjectRelationIds,function(data){
+                                        if(data.code==0){
+                                            layer.msg("授权成功");
+                                        }else if(data.code==-2){
+                                            layer.msg(result.message, {icon: 5});
+                                        }
+                                    });
+                                    layer.closeAll();
+                                }
+                                ,success: function(layero){
+                                    layer.setTop(layero);
+                                }
+                            });
+                        }else{
+                            layer.msg("分组加载失败", {icon: 5});
+                        }
+                    },"GET");
+                }
+            });
+        });
+    </script>
+</#macro>
+<#macro import_css>
+    <style type="text/css">
+        #pj {
+            padding-left: 30px;
+            padding-top: 20px;
+            border-top:1px solid #d6d7dc;
+        }
+        #pj p{
+            font-size: 12px;
+            line-height:24px;
+            color:#666666;
+        }
+        #pj input[type=checkbox]{
+            width:14px;
+            height:14px;
+            border:1px solid #d6d7dc;
+        }
+        #pj p .listfa{
+            color:#000000;
+        }
+    </style>
+</#macro>
+<@layout title="监理单位">
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-mini qx" lay-event="add"></a>
+</script>
+<table id="projectDirector" lay-filter="projectDirector">
+    <p  class="layui-table-header" style="background: #ffffff;border:1px solid #d6d7dc;line-height:45px;padding-left: 20px;font-size:17px;">监理单位</p>
+</table>
+</@layout>

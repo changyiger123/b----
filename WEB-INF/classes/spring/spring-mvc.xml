@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+    <!-- 自动扫描(自动注入) -->
+    <context:component-scan base-package="com.simplework.business.b2b.controller" >
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
+    </context:component-scan>
+
+    <mvc:annotation-driven  />
+    <mvc:resources mapping="/assets/**" location="/assets/" />
+
+    <!-- Spring上下 -->
+    <bean name="springContextUtils" class="com.simplework.business.common.spring.SpringContextUtils" scope="singleton" />
+    <!-- 这个一定得有，注意了，如果其他配置也有需要这个，已经配置了，那不必了 -->
+    <context:annotation-config />
+
+    <!--<bean id="methodHandleAspect" class="cc.alino.core.aop.SpringMethodHandleAspect"></bean>-->
+
+    <aop:aspectj-autoproxy proxy-target-class="true">
+        <!--<aop:include name="methodHandleAspect" />-->
+    </aop:aspectj-autoproxy>
+
+    <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+            <bean class="com.simplework.business.common.shiro.CurrentUserMethodArgumentResolver"/>
+        </mvc:argument-resolvers>
+        <mvc:message-converters register-defaults="true" >
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg value="UTF-8" index="0"></constructor-arg><!--避免出现乱码 -->
+            </bean>
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4" p:fastJsonConfig-ref="fastJsonConfig">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json</value>
+                        <value>text/html;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <bean id="fastJsonConfig" class="com.alibaba.fastjson.support.config.FastJsonConfig">
+        <property name="serializerFeatures">
+            <list>
+                <!-- 输出key时是否使用双引号 -->
+                <value>QuoteFieldNames</value>
+                <!-- 是否输出值为null的字段 -->
+                <!-- <value>WriteMapNullValue</value> -->
+                <!-- 数值字段如果为null,输出为0,而非null -->
+                <value>WriteNullNumberAsZero</value>
+                <!-- List字段如果为null,输出为[],而非null -->
+                <value>WriteNullListAsEmpty</value>
+                <!-- 字符类型字段如果为null,输出为"",而非null -->
+                <value>WriteNullStringAsEmpty</value>
+                <!-- Boolean字段如果为null,输出为false,而非null -->
+                <value>WriteNullBooleanAsFalse</value>
+                <!-- null String不输出  -->
+                <value>WriteNullStringAsEmpty</value>
+                <!-- null String也要输出  -->
+                <!-- <value>WriteMapNullValue</value> -->
+                <!-- Date的日期转换器 -->
+                <value>WriteDateUseDateFormat</value>
+                <!--输入中文unicode编码-->
+                <value>BrowserCompatible</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--freemarker 模版配置-->
+    <bean id="freemarkerConfig" class="com.simplework.business.common.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPaths">
+            <list>
+                <value>/WEB-INF/view/</value>
+            </list>
+        </property>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="template_update_delay">0</prop>
+                <prop key="default_encoding">UTF-8</prop>
+                <prop key="output_encoding">UTF-8</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="number_format">0.##########</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="time_format">HH:mm:ss</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="classic_compatible">true</prop>
+                <prop key="template_exception_handler">ignore</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="viewResolver"	class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
+        <property name="suffix" value=".html" />
+        <property name="contentType" value="text/html;charset=UTF-8" />
+        <property name="exposeSpringMacroHelpers" value="true" />
+        <property name="exposeRequestAttributes" value="true" />
+        <property name="exposeSessionAttributes" value="true" />
+        <property name="requestContextAttribute" value="request" />
+        <property name="cache" value="true" />
+        <property name="order" value="0" />
+    </bean>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--1024*1024 即1MB-->
+        <property name="maxUploadSize" value="5242880"/>
+    </bean>
+
+</beans>

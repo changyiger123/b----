@@ -1,0 +1,123 @@
+<#include "inc/layout_form.html" />
+<#macro import_script>
+    <script type="text/javascript" src="${REQ}/assets/js/jquery.step.min.js"></script>
+    <script type="text/javascript">
+        var $step = $("#step");
+        var $index = $("#index");
+        $step.step({
+            index: 0,
+            time: 500,
+            title: ["验证原手机", "验证新手机", "修改完成"]
+        });
+        $index.text($step.getIndex());
+        $("#prevBtn").on("click", function() {
+            $step.prevStep();
+            $index.text($step.getIndex());
+        });
+        var a=0;
+        $("#nextBtn").on("click", function() {
+            a++;
+            $step.nextStep();
+            $index.text($step.getIndex());
+            var oldMobile=$("input[name='mobile']").val();
+            var oldCode=$("input[name='oldCode']").val();
+            var newMobile=$("input[name='newMobile']").val();
+            var newCode=$("input[name='newCode']").val();
+            if(a==2){
+                if($.trim(oldMobile).length==0 || $.trim(oldCode).length==0){
+                    a == 0;
+                    layer.msg("请输入原手机号码或验证码", {icon: 5});
+                    return;
+                }
+                if($.trim(newMobile).length==0 || $.trim(newCode).length==0){
+                    a == 0;
+                    layer.msg("请输入新手机号码或验证码", {icon: 5});
+                    return;
+                }
+                ajaxData("user/mobile.html","oldMobile="+oldMobile+"&newMobile="+newMobile+"&oldCode="+oldCode+"&newCode="+newCode,function(data){
+                    console.log(data);
+                    if(data.code==0){
+                        $('.srk').children().eq(2).html('<h1 style="font-size: 24px;text-align: center;line-height:30px;">修改成功!</h1>');
+                        layer.msg("修改成功");
+                        window.location.href='${REQ}/profile.html'
+                    }else if(data.code==-2){
+                        layer.msg(data.message, {icon: 5});
+                        $('.srk').children().eq(2).html('<h1 style="font-size: 24px;text-align: center;line-height:30px;">修改失败!</h1>');
+                        location.reload();
+                        a=0;
+                    }
+                });
+            }
+            $('.srk').children().eq(a).show().siblings().hide();
+        });
+        $(".getnew").on("click",function (e) {
+            e.preventDefault();
+            var username = $("input[name='newMobile']").val();
+            if($.trim(username).length==0){
+                layer.msg("请输入手机号码", {icon: 5});
+                return;
+            }
+            layer.open({
+                type: 1
+                ,title: false
+                ,closeBtn: false
+                ,area: '330px;'
+                ,shade: 0.5
+                ,id: 'LAY_layuipro'
+                ,btn: ['取消', '确认']
+                ,moveType: 1
+                ,content:'<div class="yzm" style="width:310px;background: #ffffff;padding-top:20px;padding-left:20px;"><p style="height:30px;font-size:17px;line-height: 30px;margin-bottom: 5px;"><span>验证码</span><input type="text" name="captcha" style="width:196px;height:30px; margin-left:10px;"/></p><h6><b style="color:#666666;font-size: 12px;margin-left: 60px;line-height: 18px;">输入下图中的字符</b></h6><p class="yzpic" style="height:40px;padding-left: 60px;"><img id="psrc" src="'+window.BASE_URL+'/captcha.jpg" style="width:130px;height:40px;"/><span id="captcha"><a href="javascript:;">看不清，换一张</a></span></p></div>'
+                ,success: function(layero){
+                    $('#captcha').click(function () {
+                        $('#psrc').attr('src', window.BASE_URL+'/captcha.jpg?' + new Date().getTime());
+                    });
+                    var btn = layero.find('.layui-layer-btn');
+                    btn.css('text-align', 'center');
+                    btn.find('.layui-layer-btn0').css({'background-color':'#ffffff','border-color':'#d6d7dc','color':'#333'})
+                    btn.find('.layui-layer-btn1').click(function(){
+                        var captcha = $("input[name='captcha']").val();
+                        if(captcha==''){
+                            layer.msg("请输入验证码", {icon: 5});
+                        }else{
+                            ajaxData('code/send.html',"username="+username+"&type=reset&captcha="+captcha,function(result){
+                                if(result.code==0){
+                                    interval = setInterval(codeCountDown,1000);
+                                }else{
+                                    layer.msg(result.message, {icon: 5});
+                                }
+                            });
+                        }
+                    })
+                }
+            });
+        });
+    </script>
+</#macro>
+<#macro import_css>
+    <link rel="stylesheet" type="text/css" href="${REQ}/assets/css/jquery.step.css">
+</#macro>
+<@layout title="更改手机号">
+<div class="psdbody">
+    <h5>修改手机号码</h5>
+    <div class="main">
+        <div id="step"></div>
+        <ul class="srk">
+            <li>
+                <p><input type="text" placeholder="请输入原手机号码" name="mobile"/></p>
+                <p><input type="text" placeholder="验证码" name="oldCode"/><input class="getyzm" type="button" value="获取验证码"/></p>
+            </li>
+            <li>
+                <p><input type="text" placeholder="请输入新手机号码" name="newMobile"/></p>
+                <p><input type="text" placeholder="验证码" name="newCode"/><input class="getnew" type="button" value="获取验证码"/></p>
+            </li>
+            <li>
+
+            </li>
+        </ul>
+        <div class="btns">
+            <button id="nextBtn">下一步</button>
+        </div>
+
+    </div>
+</div>
+</@layout>

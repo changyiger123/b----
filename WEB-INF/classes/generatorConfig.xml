@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <!--加载属性文件 -->
+    <properties resource="generatorConfig.properties" />
+
+    <context id="context1" targetRuntime="MyBatis3">
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+        <!--替换Mapper成Dao  UserMapper==>>UserDao-->
+        <plugin type="com.simplework.business.iframework.mybatis.generator.GenReplaceMapperToDaoPlugin">
+            <property name="mapperSuffix" value="${daoSuffix}" />
+        </plugin>
+        <!-- 实现自定义的Dao代码生成器plugin -->
+        <plugin type="com.simplework.business.iframework.mybatis.generator.GenMapperPlugin">
+            <property name="mapperClass" value="com.simplework.business.iframework.dao.CrudDao" />
+        </plugin>
+        <!-- 实现自定义的Dao代码生成器plugin -->
+        <plugin type="com.simplework.business.iframework.mybatis.generator.GenXmlDaoPlugin" />
+        <!--<plugin type="com.simplework.business.iframework.mybatis.generator.GenServicePlugin">-->
+            <!--<property name="serviceSuffix" value="${serviceSuffix}" />-->
+            <!--<property name="pojoPackage" value="${modelPackage}"></property>-->
+            <!--<property name="targetPackage" value="${rpcPackage}"></property>-->
+            <!--<property name="targetProject" value="${rpcTargetProject}"></property>-->
+        <!--</plugin>-->
+        <plugin type="com.simplework.business.iframework.mybatis.generator.GenServiceImplPlugin">
+            <property name="daoSuffix" value="${daoSuffix}" />
+            <property name="superClass" value="com.simplework.business.iframework.bo.CrudBo"/>
+            <property name="rpcServiceSuffix" value="${serviceSuffix}"/>
+            <!--<property name="rpcPackage" value="${rpcPackage}"/>-->
+            <property name="pojoPackage" value="${modelPackage}"></property>
+            <property name="targetPackage" value="${servicePackage}"></property>
+            <property name="targetProject" value="${serviceTargetProject}"></property>
+        </plugin>
+        <commentGenerator type="com.simplework.business.iframework.mybatis.generator.GenCommentGenerator"/>
+
+        <!-- 数据库连接URL，用户名，密码 -->
+        <jdbcConnection driverClass="${driverClass}" connectionURL="${connectionURL}" userId="${user}" password="${password}" />
+        <!--生成模型的包名和位置 -->
+        <javaModelGenerator targetPackage="${modelPackage}" targetProject="${modelTargetProject}">
+            <property name="trimStrings" value="true" />
+            <property name="rootClass" value="${pojoRootClass}"/>
+        </javaModelGenerator>
+        <!--映射文件的包名和位置 -->
+        <sqlMapGenerator targetPackage="${sqlMapperPackage}" targetProject="${sqlMapperTargetProject}" />
+        <!--DAO的包名和位置 -->
+        <javaClientGenerator targetPackage="${daoMapperPackage}" targetProject="${daoMapperTargetProject}" type="XMLMAPPER" />
+        <!--要生成哪些表 -->
+        <!--<table tableName="project_supervision_mapper" domainObjectName="ProjectSupervisionRelation" enableSelectByExample="false" enableDeleteByExample="false"-->
+               <!--enableCountByExample="false" enableUpdateByExample="false"-->
+               <!--selectByExampleQueryId="false">-->
+        <!--</table>-->
+        <!--<table tableName="project_supervision" domainObjectName="ProjectSupervision" enableSelectByExample="false" enableDeleteByExample="false"-->
+               <!--enableCountByExample="false" enableUpdateByExample="false"-->
+               <!--selectByExampleQueryId="false">-->
+        <!--</table>-->
+    </context>
+</generatorConfiguration>

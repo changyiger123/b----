@@ -1,0 +1,78 @@
+<#assign REQ_URI=request.getRequestURI>
+<#macro import_script></#macro>
+<#macro import_css></#macro>
+<#macro layout title>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>${title!"登录"} - 浙江易建易工网络科技有限公司</title>
+    <#include "inc/favicon.html" />
+    <link rel="stylesheet" type="text/css" href="${REQ}/assets/plugins/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="${REQ}/assets/css/app.css">
+    <@import_css />
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo logo" style="width:100px"><div class="mainlogo"></div></div>
+        <div id="dewm">
+
+        </div>
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><div class="welcome"></div></li>
+            <li class="layui-nav-item"><a href="javascript:;" id="ewm"></a></li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="${REQ}/profile.html" style="padding:0 6px">
+                    <img src="${REQ}/assets/img/zy_mrtx.png" alt=""/>
+                </a>
+            </li>
+            <li class="layui-nav-item">你好，<span><@shiro.principal property="username"></@shiro.principal></span></li>
+            <li class="layui-nav-item"><img class="wrz" src="${REQ}/assets/img/wrz.png" alt=""/></li>
+            <li class="layui-nav-item lxdh" id="lxdh"><a href="javascript:;">联系电话</a></li>
+            <li class="layui-nav-item aqtc" id="aqtc"><a href="/logout.html" class="tc">安全退出</a></li>
+        </ul>
+    </div>
+    <div class="layui-side forbidside">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item"><a href="${REQ}/project/examine.html" class="dsh">待审核班组<span></span></a></li>
+                <li class="layui-nav-item xmlist">
+                    <a href="javascript:;" class="mypro">我的项目(<span class="mypronum">0</span>)</a>
+                    <dl class="layui-nav-child myprolist">
+                        <dd class="cjbefore">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="${REQ}/assets/img/zy_cbl_cjxfz.png" alt=""/></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="${REQ}/project/director.html" class="jldw">主管单位</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body identifybody">
+        <#nested>
+    </div>
+</div>
+<script type="text/javascript">window.BASE_URL = "${REQ}";</script>
+<script type="text/javascript" src="${REQ}/assets/js/jquery.min.js" ></script>
+<script type="text/javascript" src="${REQ}/assets/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="${REQ}/assets/js/app.js"></script>
+<script type="text/javascript">
+    companyAuthInfo();
+    ajaxData("project/team.html","page=1&limit=100",function(result){
+        if(result.code==0){
+            $('.mypronum').html(result.content.length);
+            var myList='';
+            for(var i=0;i<result.content.length;i++){
+                myList+='<a href="${REQ}/project/list/'+result.content[i].id+'.html" class="fzname" data-id="'+result.content[i].id+'">'+result.content[i].tname+ '</a>'
+            }
+            $('.myprolist').prepend(myList);
+        }
+    },"GET");
+</script>
+<@import_script />
+</body>
+</html>
+</#macro>

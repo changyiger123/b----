@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.1.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.0.xsd ">
+
+    <!-- 自动扫描(自动注入) -->
+    <context:component-scan base-package="com.simplework.business.common.shiro.service,com.simplework.business.b2b"/>
+
+    <context:property-placeholder location="classpath:config-*.properties" file-encoding="UTF-8" />
+
+    <!-- 配置数据源 -->
+    <bean name="masterDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc.master.url}" />
+        <property name="username" value="${jdbc.master.username}" />
+        <property name="password" value="${jdbc.master.password}" />
+        <property name="initialSize" value="${jdbc.initialSize}" />
+        <property name="minIdle" value="${jdbc.minIdle}" />
+        <property name="maxActive" value="${jdbc.maxActive}" />
+        <property name="maxWait" value="${jdbc.maxWait}" />
+        <property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />
+        <property name="validationQuery" value="${jdbc.validationQuery}" />
+        <property name="testWhileIdle" value="${jdbc.testWhileIdle}" />
+        <property name="testOnBorrow" value="${jdbc.testOnBorrow}" />
+        <property name="testOnReturn" value="${jdbc.testOnReturn}" />
+        <property name="removeAbandoned" value="${jdbc.removeAbandoned}" />
+        <property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}" />
+        <property name="filters" value="${jdbc.filters}" />
+        <property name="logAbandoned" value="${jdbc.logAbandoned}" />
+    </bean>
+    <bean name="slaveDataSource1" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc.slave.url}" />
+        <property name="username" value="${jdbc.slave.username}" />
+        <property name="password" value="${jdbc.slave.password}" />
+        <property name="initialSize" value="${jdbc.initialSize}" />
+        <property name="minIdle" value="${jdbc.minIdle}" />
+        <property name="maxActive" value="${jdbc.maxActive}" />
+        <property name="maxWait" value="${jdbc.maxWait}" />
+        <property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />
+        <property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />
+        <property name="validationQuery" value="${jdbc.validationQuery}" />
+        <property name="testWhileIdle" value="${jdbc.testWhileIdle}" />
+        <property name="testOnBorrow" value="${jdbc.testOnBorrow}" />
+        <property name="testOnReturn" value="${jdbc.testOnReturn}" />
+        <property name="removeAbandoned" value="${jdbc.removeAbandoned}" />
+        <property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}" />
+        <property name="filters" value="${jdbc.filters}" />
+        <property name="logAbandoned" value="${jdbc.logAbandoned}" />
+    </bean>
+
+    <bean id="dataSource" class="com.simplework.business.iframework.mybatis.dynamic.DataSource">
+        <property name="masterDataSource" ref="masterDataSource" />
+        <property name="slaveDataSources">
+            <list>
+                <ref bean="slaveDataSource1" />
+            </list>
+        </property>
+        <property name="slaveDataSourcePollPattern" value="1" />
+        <property name="defaultTargetDataSource" ref="masterDataSource"/>
+    </bean>
+
+    <bean id="mySqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation">
+            <value>classpath:mybatis/mybatisConfig.xml</value>
+        </property>
+        <property name="mapperLocations">
+            <list>
+                <value>classpath:mybatis/conditionQuery.xml</value>
+                <value>classpath:com/simplework/business/b2b/dao/*.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.simplework.business.b2b.dao" />
+        <property name="sqlSessionFactoryBeanName" value="mySqlSessionFactory" />
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+
+    <!--<tx:advice id="txAdvice" transaction-manager="transactionManager">-->
+        <!--<tx:attributes>-->
+            <!--<tx:method name="publish*" />-->
+            <!--<tx:method name="save*" />-->
+            <!--<tx:method name="add*" />-->
+            <!--<tx:method name="update*" />-->
+            <!--<tx:method name="insert*" />-->
+            <!--<tx:method name="create*" />-->
+            <!--<tx:method name="del*" />-->
+            <!--<tx:method name="load*" />-->
+            <!--<tx:method name="init*" />-->
+            <!--<tx:method name="*"  read-only="true"/>-->
+        <!--</tx:attributes>-->
+    <!--</tx:advice>-->
+
+    <bean id="dynamicDataSourceAspect" class="com.simplework.business.iframework.mybatis.dynamic.aspect.DynamicDataSource"></bean>
+
+    <aop:config proxy-target-class="false">
+        <!--<aop:advisor advice-ref="txAdvice" pointcut="execution(public * com.simplework.business.b2b.bo.*.*(..))" order="2" />-->
+        <!--spring读写分离-->
+        <aop:aspect id="c" ref="dynamicDataSourceAspect" order="1">
+            <aop:pointcut id="tx" expression="execution(* com.simplework.business.*.dao.*.*(..))"/>
+            <aop:before pointcut-ref="tx" method="before"/>
+            <aop:after pointcut-ref="tx" method="after"/>
+        </aop:aspect>
+    </aop:config>
+</beans>

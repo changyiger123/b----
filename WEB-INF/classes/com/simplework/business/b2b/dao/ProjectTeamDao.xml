@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simplework.business.b2b.dao.ProjectTeamDao">
+  <resultMap id="BaseResultMap" type="com.simplework.business.b2b.pojo.ProjectTeam">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="tname" jdbcType="VARCHAR" property="tname" />
+    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, user_id, tname, add_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from project_team
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from project_team
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertSelective" parameterType="com.simplework.business.b2b.pojo.ProjectTeam" keyProperty="id">
+    insert into project_team
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="tname != null">
+        tname,
+      </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="tname != null">
+        #{tname,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.simplework.business.b2b.pojo.ProjectTeam">
+    update project_team
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="tname != null">
+        tname = #{tname,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null">
+        add_time = #{addTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="count" parameterType="com.simplework.business.iframework.mybatis.query.ConditionExample" resultType="java.lang.Integer">
+    select count(*) from project_team
+	<if test="_parameter != null" >
+		<include refid="conditionQuery.where" />
+	</if>
+  </select>
+  <select id="query" parameterType="com.simplework.business.iframework.mybatis.query.ConditionExample" resultMap="BaseResultMap">
+    select
+	<if test="distinct" >
+		distinct
+	</if>
+	<include refid="Base_Column_List" />
+	from project_team
+	<if test="_parameter != null" >
+		<include refid="conditionQuery.where" />
+	</if>
+	<if test="orderByClause != null" >
+		order by ${orderByClause}
+	</if>
+	<if test="limit != null" >
+		<if test="offset != null" >
+			limit ${offset}, ${limit}
+		</if>
+		<if test="offset == null" >
+			limit ${limit}
+		</if>
+	</if>
+  </select>
+</mapper>

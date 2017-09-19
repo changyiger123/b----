@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simplework.business.b2b.dao.ProjectSubjectRelationDao">
+  <resultMap id="BaseResultMap" type="com.simplework.business.b2b.pojo.ProjectSubjectRelation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="subject_id" jdbcType="BIGINT" property="subjectId" />
+    <result column="project_id" jdbcType="BIGINT" property="projectId" />
+    <result column="team_id" jdbcType="BIGINT" property="teamId" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, subject_id, project_id, team_id, status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from project_subject_mapper
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from project_subject_mapper
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertSelective" parameterType="com.simplework.business.b2b.pojo.ProjectSubjectRelation">
+    insert into project_subject_mapper
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="subjectId != null">
+        subject_id,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="teamId != null">
+        team_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="subjectId != null">
+        #{subjectId,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="teamId != null">
+        #{teamId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.simplework.business.b2b.pojo.ProjectSubjectRelation">
+    update project_subject_mapper
+    <set>
+      <if test="subjectId != null">
+        subject_id = #{subjectId,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="teamId != null">
+        team_id = #{teamId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="count" parameterType="com.simplework.business.iframework.mybatis.query.ConditionExample" resultType="java.lang.Integer">
+    select count(*) from project_subject_mapper
+	<if test="_parameter != null" >
+		<include refid="conditionQuery.where" />
+	</if>
+  </select>
+  <select id="query" parameterType="com.simplework.business.iframework.mybatis.query.ConditionExample" resultMap="BaseResultMap">
+    select
+	<if test="distinct" >
+		distinct
+	</if>
+	<include refid="Base_Column_List" />
+	from project_subject_mapper
+	<if test="_parameter != null" >
+		<include refid="conditionQuery.where" />
+	</if>
+	<if test="orderByClause != null" >
+		order by ${orderByClause}
+	</if>
+	<if test="limit != null" >
+		<if test="offset != null" >
+			limit ${offset}, ${limit}
+		</if>
+		<if test="offset == null" >
+			limit ${limit}
+		</if>
+	</if>
+  </select>
+  <resultMap id="BaseResultMap2" extends="BaseResultMap" type="com.simplework.business.b2b.pojo.ProjectInfo">
+    <result column="pname" jdbcType="VARCHAR" property="pname" />
+    <result column="manageNames" jdbcType="VARCHAR" property="manageNames" />
+    <result column="memberCount" jdbcType="INTEGER" property="memberCount" />
+    <result column="memberNames" jdbcType="VARCHAR" property="memberNames" />
+    <result column="memberNames2" jdbcType="VARCHAR" property="memberNames2" />
+    <result column="userId" jdbcType="BIGINT" property="userId" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+  </resultMap>
+    <select id="queryList" parameterType="map" resultMap="BaseResultMap2">
+      select
+      t1.id
+      ,t3.name as pname
+      ,t1.project_id
+      ,t1.team_id
+      ,t1.status
+      ,t2.id as subject_id
+      ,(select GROUP_CONCAT(realname SEPARATOR ',') AS realname from project_manager pm inner join user u1 on pm.manager_id = u1.id where pm.project_id=t1.project_id) as manageNames
+      ,(select GROUP_CONCAT(realname SEPARATOR ',') AS realname from project_member pm1 inner join user u2 on pm1.user_id = u2.id where pm1.project_id=t1.project_id and pm1.status=0) as memberNames
+      ,(select GROUP_CONCAT(realname SEPARATOR ',') AS realname from project_member pm1 inner join user u2 on pm1.user_id = u2.id where pm1.project_id=t1.project_id and pm1.status=1) as memberNames2
+      ,(select count(id) from project_member pm1 where pm1.project_id = t1.project_id) as memberCount
+      ,t2.user_id
+      ,t4.realname,t4.mobile
+      from project_subject_mapper t1
+      inner join project_subject t2 on t1.subject_id = t2.id
+      inner join project t3 on t1.project_id = t3.id
+      inner join user t4 on t3.user_id = t4.id
+      <where>
+        <if test="userId != null" >
+          and t2.user_id = #{userId}
+        </if>
+        <if test="status != null" >
+          and t1.status = #{status}
+        </if>
+        <if test="teamId != null" >
+          and t1.team_id = #{teamId}
+        </if>
+        <if test="teamId == null" >
+          and t1.team_id is null
+        </if>
+      </where>
+      <if test="limit != null" >
+          <if test="offset != null" >
+              limit ${offset}, ${limit}
+          </if>
+          <if test="offset == null" >
+              limit ${limit}
+          </if>
+      </if>
+    </select>
+  <select id="queryCount" parameterType="map" resultType="java.lang.Integer">
+    select
+    count(t1.id)
+    from project_subject_mapper t1
+    inner join project_subject t2 on t1.subject_id = t2.id
+    <where>
+      <if test="userId != null" >
+        and t2.user_id = #{userId}
+      </if>
+      <if test="status != null" >
+        and t1.status = #{status}
+      </if>
+      <if test="teamId != null" >
+        and t1.team_id = #{teamId}
+      </if>
+      <if test="teamId == null" >
+        and t1.team_id is null
+      </if>
+    </where>
+  </select>
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simplework.business.b2b.dao.UserSecurityDao">
+  <resultMap id="BaseResultMap" type="com.simplework.business.b2b.pojo.UserSecurity">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="pay_password" jdbcType="VARCHAR" property="payPassword" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, uuid, password, pay_password, salt
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_security
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from user_security
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertSelective" parameterType="com.simplework.business.b2b.pojo.UserSecurity">
+    insert into user_security
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="payPassword != null">
+        pay_password,
+      </if>
+      <if test="salt != null">
+        salt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="payPassword != null">
+        #{payPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        #{salt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.simplework.business.b2b.pojo.UserSecurity">
+    update user_security
+    <set>
+      <if test="uuid != null">
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="payPassword != null">
+        pay_password = #{payPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  <select id="count" parameterType="com.simplework.business.iframework.mybatis.query.ConditionExample" resultType="java.lang.Integer">
+    select count(*) from user_security
+	<if test="_parameter != null" >
+		<include refid="conditionQuery.where" />
+	</if>
+  </select>
+  <select id="query" parameterType="com.simplework.business.iframework.mybatis.query.ConditionExample" resultMap="BaseResultMap">
+    select
+	<if test="distinct" >
+		distinct
+	</if>
+	<include refid="Base_Column_List" />
+	from user_security
+	<if test="_parameter != null" >
+		<include refid="conditionQuery.where" />
+	</if>
+	<if test="orderByClause != null" >
+		order by ${orderByClause}
+	</if>
+	<if test="limit != null" >
+		<if test="offset != null" >
+			limit ${offset}, ${limit}
+		</if>
+		<if test="offset == null" >
+			limit ${limit}
+		</if>
+	</if>
+  </select>
+</mapper>

@@ -1,0 +1,107 @@
+<#include "inc/layout.html" />
+<#macro import_script>
+    <script type="text/javascript">
+        $(".xmlist").addClass("layui-nav-itemed");
+
+        layui.use(['layer', 'table'], function(){
+            var layer = layui.layer
+                ,table = layui.table;
+            var projectListTable = table.render({
+                elem: '#projectList'
+                ,page:true
+                ,limits:[15,20,30,50,100]
+                ,limit:15
+                ,id:'projectList'
+                ,cols:  [[
+                    {field: 'pname', title: '班组名称', width:200,event: 'viewDetail'}
+                    ,{field: 'manageNames', title: '承包人', width:200,event: 'viewDetail'}
+                    ,{field: 'realname', title: '班组长', width:200,event: 'viewDetail'}
+                    ,{field: 'memberCount', title: '工人数', width:200,event: 'viewDetail'}
+                    ,{fixed: 'right', width:200, align:'center',title: '操作', toolbar: '#barDemo'}
+                ]]
+                ,url:"${REQ}/project/list/${teamId}.json"
+            });
+            table.on('tool(projectList)', function(obj){
+                var data = obj.data
+                    ,layEvent = obj.event;
+                if(layEvent === 'add'){
+                    var teamList = $('.myprolist a'),teamListRender = "<dl class=\"layui-nav-child project-examine-team-list layui-layer-wrap\" style=\"display: block; padding:10px 20px; top:0;\">";
+                    $.each(teamList,function (i) {
+                        if($(this).data("id")!=0){
+                            teamListRender += "<dd><a href=\"javascript:;\" class=\"fzname\" data-id=\""+$(this).data("id")+"\">"+$(this).html()+"</a></dd>";
+                        }
+                    });
+                    teamListRender += "</dl>";
+                    layer.open({
+                        title: '添加到分组'
+                        ,shade:false
+                        ,area: ['150px','300px']
+                        ,content: teamListRender
+                        ,btn:[]
+                    });
+                    $('.project-examine-team-list').on('click','.fzname',function(){
+                        var teamId = $(this).data('id');
+                        ajaxData("project/move.html","relationId="+data.id+"&teamId="+teamId,function(result){
+                            if(result.code==0){
+                                layer.msg("成功");
+                                projectListTable.reload();
+                            }else{
+                                layer.msg(result.message, {icon: 5});
+                            }
+                        });
+                        layer.closeAll();
+                    })
+                } else if(layEvent === 'del'){
+                    layer.confirm('请确认是否删除？', function(index){
+                        obj.del();
+                        ajaxData("project/delete.html","relationId="+data.id,function(result){
+                            if(result.code==0){
+                                layer.msg("成功");
+                                projectListTable.reload();
+                            }else{
+                                layer.msg(result.message, {icon: 5});
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }else if(layEvent == 'viewDetail'){
+                    var contentHtml = "";
+                    contentHtml += "<h3 style='font-weight: bold;'>班组成员</h3>";
+                    contentHtml += "<p>承包人："+(typeof data.manageNames == "undefined"?"":data.manageNames)+"</p>";
+                    contentHtml += "<p>班组长："+(typeof data.realname == "undefined"?"":data.realname)+"</p>";
+                    contentHtml += "<p>成员："+(typeof data.memberNames == "undefined"?"":data.memberNames)+"</p>";
+                    contentHtml += "<p>已退出成员："+(typeof data.memberNames2 == "undefined"?"":data.memberNames2)+"</p>";
+                    layer.open({
+                        title: data.pname
+                        ,content:contentHtml
+                        ,area: ['350px','300px']
+                    });
+                }
+            });
+        });
+    </script>
+</#macro>
+<#macro import_css>
+</#macro>
+<@layout title="我的项目">
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-mini adds" lay-event="add"></a>
+    <a class="layui-btn layui-btn-primary layui-btn-mini dels" lay-event="del"></a>
+</script>
+<script type="text/html" id="userBar">
+    <a lay-event="abc">{{d.owner.mobile}}</a>
+</script>
+<script type="text/html" id="tablebar">
+    <a lay-event="abc">{{d.owner.username}}</a>
+</script>
+<script type="text/html" id="numparse">
+    <a lay-event="abc">{{d.memberCount}}</a>
+</script>
+<script type="text/html" id="bzname">
+    <a lay-event="abc">{{d.name}}</a>
+</script>
+<!-- 内容主体区域 -->
+<table id="projectList" lay-filter="projectList">
+    <p class="layui-table-header zmtitle" style="background: #ffffff;border:1px solid #d6d7dc;line-height:45px;padding-left: 20px;font-size:17px;">我的项目</p>
+</table>
+</@layout>

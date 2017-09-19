@@ -1,0 +1,83 @@
+<#include "inc/layout_form.html" />
+<#macro import_script>
+    <script type="text/javascript">
+        ajaxData("profile/info.html",null,function(result){
+            if(result.code==0){
+                $('.avatar').attr('src', result.content.owner.avatar); //图片链接（base64）
+                $('.businessUrl').attr('src', result.content.subject.avatar); //图片链接（base64）
+                $('.certificatesUrl').attr('src', result.content.subject.certificatesUrl); //图片链接（base64）
+                $('.realname').html(result.content.owner.realname);
+                $('.mobile').html(result.content.owner.mobile);
+                $('.cname').html(result.content.subject.cname);
+                $('.address').html(result.content.subject.address);
+                $('.businessCode').html(result.content.subject.businessCode);
+                $('.certificatesCode').html(result.content.subject.certificatesCode);
+                if(result.content.subject.status==1){
+                    $('.wrz').attr('src',window.BASE_URL+'/assets/img/yrz.png');
+                }
+            }
+        },"GET");
+        layui.use('upload', function(){
+            var upload = layui.upload;
+            uploadPlugin(upload,{
+                elem: '#test3'
+                ,data:{
+                    type:'avatar'
+                }
+                ,previewElem:"#demo3"
+                ,inputHiddenElem:"input[name='certificatesUrl']"
+                ,uploadDone:function(imgback){
+                    ajaxData("user/avatar.html","avatar="+imgback,function(data){
+                        if(data.code==0){
+                            layer.msg('头像修改成功');
+                        }else{
+                            layer.msg('头像修改失败');
+                        }
+                    })
+                }
+            });
+        });
+    </script>
+</#macro>
+<#macro import_css>
+</#macro>
+<@layout title="个人资料">
+<div class="pcencerbody">
+<div class="pcentertop">
+    <p class="pcentertitle">编辑个人信息</p>
+    <div class="personalinfo">
+        <dl id="test3">
+            <dt><img style="width:160px;height:160px;" src="${REQ}/assets/img/grxx_tx.png" alt="" class="avatar" id="demo3"/></dt>
+            <dd class="changeavtar"><a href="javascript:;">修改头像</a></dd>
+        </dl>
+        <div class="nameinfo">
+            <p>用户名:<span class="realname"></span></p>
+            <p>手机号码:<span class="mobile"></span><a href="${REQ}/reset/mobile.html" class="changemobile">修改号码</a></p>
+        </div>
+    </div>
+</div>
+<div class="pcenterbottom">
+    <p class="pcentertitle">企业信息</p>
+    <div class="yytitle"><p>营业执照</p><span></span></div>
+    <dl>
+        <dt>
+            <img src="${REQ}/assets/img/sczp.png" alt="" class="businessUrl"/>
+        </dt>
+        <dd>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;企业名称: <span class="cname"></span></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;注册地址: <span class="address"></span></p>
+            <p>营业执照号: <span class="businessCode"></span></p>
+        </dd>
+    </dl>
+    <div class="yytitle"><p>资质证书</p><span></span></div>
+    <dl>
+        <dt>
+            <img src="${REQ}/assets/img/sczp.png" alt="" class="certificatesUrl"/>
+        </dt>
+        <dd>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;证书编号: <span class="certificatesCode"></span></p>
+        </dd>
+    </dl>
+</div>
+</div>
+</@layout>

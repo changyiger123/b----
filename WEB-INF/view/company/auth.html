@@ -1,0 +1,57 @@
+<#include "inc/layout_form.html" />
+<#macro import_script>
+    <script type="text/javascript">
+      companyAuthForm();
+      layui.use('upload', function(){
+          var upload = layui.upload;
+          uploadPlugin(upload);
+          uploadPlugin(upload,{
+              elem: '#test2'
+              ,data:{
+                  type:'cert'
+              }
+              ,previewElem:"#demo2"
+              ,inputHiddenElem:"input[name='certificatesUrl']"
+          });
+      });
+    </script>
+</#macro>
+<#macro import_css>
+    <style type="text/css">
+        .identifybody{width:1198px;height:1050px;overflow:hidden;margin:0 auto;margin-top:20px;background:#fff;border:1px solid #d6d7dc}
+    </style>
+</#macro>
+<@layout title="企业认证">
+<div class="identifybody">
+<h3 style="font-size: 24px;">企业认证</h3>
+<div class="upbody">
+    <input type="hidden" name="id"/>
+    <h5 style="font-size: 14px;margin-bottom:5px">上传图片要求</h5>
+    <p>1. 5M以内，JPG/PNG格式的清晰图片;</p>
+    <p style="margin-top: -5px">2. 我司资质验证系统已与工商部门联网，请勿提供虚假证件。</p>
+    <div class="yytitle"><p>营业执照</p><span></span></div>
+    <div class="upload">
+        <dl id="test1">
+            <dt><img src="${REQ}/assets/img/sczp.png" alt="" id="demo1"/></dt>
+        </dl>
+        <div class="qyinput">
+            <p><span>&nbsp;&nbsp;&nbsp;&nbsp;企业名称</span><input type="text" name="cname" placeholder=""/></p>
+            <p><span>&nbsp;&nbsp;&nbsp;&nbsp;注册地址</span><input type="text" name="address"/></p>
+            <p><span>营业执照号</span><input type="text" name="businessCode"/></p>
+            <input type="hidden" name="businessUrl"/>
+        </div>
+    </div>
+    <div class="yytitle"><p>资质证书</p><span></span></div>
+    <div class="upload">
+        <dl id="test2">
+            <dt><img src="${REQ}/assets/img/sczp.png" alt="" id="demo2"/></dt>
+            <input type="hidden" name="certificatesUrl"/>
+        </dl>
+        <div class="qyinput">
+            <p><span>&nbsp;&nbsp;&nbsp;&nbsp;证书编号</span><input type="text" name="certificatesCode"/></p>
+        </div>
+    </div>
+</div>
+<p class="tj"><a id="authBtn" href="javascript:;">提交</a></p>
+</div>
+</@layout>
